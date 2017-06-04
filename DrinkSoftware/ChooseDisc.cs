@@ -11,9 +11,9 @@ using Npgsql;
 
 namespace DrinkSoftware
 {
-    public partial class Order : Form
+    public partial class ChooseDisc : Form
     {
-        public Order()
+        public ChooseDisc()
         {
             InitializeComponent();
         }
@@ -57,6 +57,27 @@ namespace DrinkSoftware
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string connStr = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=1;Database=DrinkSoftware;encoding=unicode;";
+            NpgsqlConnection conn12 = new NpgsqlConnection(connStr);
+            conn12.Open();
+            string commStrr = "SELECT * FROM MOVIE ORDER BY ID";
+            NpgsqlCommand comm2 = new NpgsqlCommand(commStrr, conn12);
+            DataSet ds = new DataSet();
+            NpgsqlDataAdapter da = new NpgsqlDataAdapter(commStrr, conn12);
+            try
+            {
+                da.Fill(ds, "DISK");
+            }
+            catch (NpgsqlException ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            conn12.Close();
+            dataGridView1.DataSource = ds.Tables["DISK"];
         }
     }
 }
